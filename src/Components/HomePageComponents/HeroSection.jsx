@@ -89,7 +89,7 @@ const HeroSection = () => {
             whileHover={{ textShadow: "0 0 8px rgba(255,255,255,0.7)" }}
             transition={{ duration: 0.3 }}
           >
-            Explore, Learn, and Share Your Thoughts
+            Explore, Learn and Share Your Thoughts
           </motion.h1>
           <motion.p
             className="text-lg sm:text-xl text-white/80 leading-relaxed backdrop-blur-sm bg-white/5 p-4 mb-8 rounded-2xl border border-white/10"
