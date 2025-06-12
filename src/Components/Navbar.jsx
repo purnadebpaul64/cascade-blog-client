@@ -1,6 +1,6 @@
 import { FileText, Gem, House, LogIn, Menu, X } from "lucide-react";
 import React, { useState } from "react";
-import { NavLink } from "react-router";
+import { Link, NavLink } from "react-router";
 
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -43,14 +43,17 @@ const Navbar = () => {
           {/* Desktop Actions */}
           <div className="hidden lg:flex items-center space-x-4">
             <div className="flex items-center space-x-2">
-              <button className="btn btn-outline btn-sm">
+              <Link to={"/auth"} className="btn btn-outline btn-sm">
                 <LogIn className="h-4 w-4 mr-1" />
                 <p>Login</p>
-              </button>
+              </Link>
 
-              <button className="btn btn-sm bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700">
+              <Link
+                to={"/auth/registration"}
+                className="btn btn-sm bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700"
+              >
                 Register
-              </button>
+              </Link>
             </div>
           </div>
           {/* Mobile menu button */}
