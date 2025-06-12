@@ -5,6 +5,7 @@ import AddBlogPage from "../Pages/AddBlogPage";
 import AuthLayout from "../Layouts/AuthLayout";
 import Login from "../Components/AuthComponents/Login";
 import Registration from "../Components/AuthComponents/Registration";
+import ErrorPage from "../Pages/ErrorPage";
 
 const router = createBrowserRouter([
   {
@@ -34,6 +35,10 @@ const router = createBrowserRouter([
         element: <Registration></Registration>,
       },
     ],
+  },
+  {
+    path: "*",
+    element: <ErrorPage></ErrorPage>,
   },
 ]);
 
