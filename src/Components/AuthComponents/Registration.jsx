@@ -1,12 +1,16 @@
 import { ArrowLeft } from "lucide-react";
 import React, { use, useState } from "react";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router";
 import Swal from "sweetalert2";
+import { AuthContext } from "../../Providers/AuthProviders";
 
 const Registration = () => {
+  const navigate = useNavigate();
+  const { createUser, setUser, updateUser, googleSignIn } = use(AuthContext);
   const [showPass, setShowPass] = useState(false);
   const [passError, setPassError] = useState([]);
+
   const handleRegister = (e) => {
     e.preventDefault();
     const form = e.target;
@@ -34,6 +38,40 @@ const Registration = () => {
       setPassError(errors);
       return;
     }
+
+    createUser(email, pass)
+      .then((result) => {
+        const user = result.user;
+        updateUser({ displayName: name, photoURL: photo })
+          .then(() => {
+            setUser({ ...user, displayName: name, photoURL: photo });
+            navigate("/");
+            Swal.fire({
+              title: "Profile Created Successfully",
+              icon: "success",
+              showConfirmButton: false,
+              timer: 1500,
+            });
+          })
+          .catch((error) => {
+            // console.log(error);
+            Swal.fire({
+              icon: "error",
+              title: "Oops...",
+              text: `${error}`,
+            });
+            setUser(user);
+          });
+      })
+      .catch((error) => {
+        const errorCode = error.code;
+        const errorMessage = error.message;
+        Swal.fire({
+          icon: "error",
+          title: "Oops...",
+          text: `${errorMessage}`,
+        });
+      });
   };
   return (
     <div className="py-5 flex flex-col gap-6 justify-center items-center">
@@ -116,7 +154,12 @@ const Registration = () => {
           Register
         </button>
         <div className="divider">OR</div>
-        <button className="btn bg-white text-black border-[#e5e5e5]">
+        <button
+          onClick={() => {
+            googleSignIn();
+          }}
+          className="btn bg-white text-black border-[#e5e5e5]"
+        >
           <svg
             aria-label="Google logo"
             width="16"
