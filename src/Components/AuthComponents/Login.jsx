@@ -27,7 +27,7 @@ const Login = () => {
       </div>
       <form
         onSubmit={handleLogin}
-        className="fieldset backdrop-blur-3xl bg-slate-800/50 border-primary rounded-box w-sm border p-4"
+        className="fieldset backdrop-blur-3xl bg-slate-800/50 border-primary rounded-box w-screen md:w-sm border p-4"
       >
         <legend className="fieldset-legend justify-center text-xl font-bold">
           Login Your Account

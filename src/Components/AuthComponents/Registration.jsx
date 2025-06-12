@@ -49,7 +49,7 @@ const Registration = () => {
       </div>
       <form
         onSubmit={handleRegister}
-        className="fieldset bg-base-200 border-primary rounded-box w-sm border p-4"
+        className="fieldset bg-base-200 border-primary rounded-box border p-4 w-screen md:w-sm"
       >
         <legend className="fieldset-legend justify-center text-xl font-bold">
           Create Account
