@@ -80,7 +80,7 @@ const AddBlogPage = () => {
             Add a New Blog Post
           </motion.h2>
           <motion.p
-            className="text-md sm:text-xl text-white/80 max-w-3xl mx-auto backdrop-blur-sm bg-white/5 p-4 rounded-xl border border-white/10"
+            className="text-md0 sm:text-xl text-white/80 max-w-3xl mx-auto backdrop-blur-sm bg-white/5 p-4 rounded-xl border border-white/10"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.3 }}
