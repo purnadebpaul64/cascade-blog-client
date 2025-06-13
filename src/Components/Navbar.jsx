@@ -37,9 +37,11 @@ const Navbar = () => {
         <div className="flex h-16 items-center justify-between">
           {/* Logo */}
           <div className="flex items-center">
-            <h1 className="text-2xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
-              CascadeBlog
-            </h1>
+            <Link to={"/"}>
+              <h1 className="text-2xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+                CascadeBlog
+              </h1>
+            </Link>
           </div>
           {/* Desktop Navigation */}
           <div className="hidden lg:flex items-center space-x-6">
@@ -68,14 +70,14 @@ const Navbar = () => {
               {user && (
                 <>
                   <NavLink
-                    to={"/featured-blogs"}
+                    to={"/add-blog"}
                     className="flex items-center space-x-1 text-[#757D85] hover:text-primary transition-colors font-medium px-3 py-2 rounded-md hover:bg-accent"
                   >
                     <CirclePlus className="h-4 w-4" />
                     <span>Add Blog</span>
                   </NavLink>
                   <NavLink
-                    to={"/featured-blogs"}
+                    to={"/wishlist"}
                     className="flex items-center space-x-1 text-[#757D85] hover:text-primary transition-colors font-medium px-3 py-2 rounded-md hover:bg-accent"
                   >
                     <BookmarkCheck className="h-4 w-4" />
@@ -162,14 +164,14 @@ const Navbar = () => {
                 {user && (
                   <>
                     <NavLink
-                      to={"/featured-blogs"}
+                      to={"/add-blog"}
                       className="flex items-center space-x-1 text-[#757D85] hover:text-primary transition-colors font-medium px-3 py-2 rounded-md hover:bg-accent"
                     >
                       <CirclePlus className="h-4 w-4" />
                       <span>Add Blog</span>
                     </NavLink>
                     <NavLink
-                      to={"/featured-blogs"}
+                      to={"/wishlist"}
                       className="flex items-center space-x-1 text-[#757D85] hover:text-primary transition-colors font-medium px-3 py-2 rounded-md hover:bg-accent"
                     >
                       <BookmarkCheck className="h-4 w-4" />
