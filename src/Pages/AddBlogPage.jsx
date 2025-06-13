@@ -3,10 +3,13 @@ import { useInView } from "react-intersection-observer";
 import { motion } from "framer-motion";
 import { Sparkles } from "lucide-react";
 import { AuthContext } from "../Providers/AuthProviders";
+import axios from "axios";
+import Swal from "sweetalert2";
+import { useNavigate } from "react-router";
 
 const AddBlogPage = () => {
   const { user } = use(AuthContext);
-
+  const navigate = useNavigate();
   const { ref: titleRef, inView: titleInView } = useInView({
     threshold: 0.3,
     triggerOnce: true,
@@ -26,6 +29,30 @@ const AddBlogPage = () => {
         ease: "easeInOut",
       },
     },
+  };
+
+  const handleAddBlog = (e) => {
+    e.preventDefault();
+
+    const form = e.target;
+    const formData = new FormData(form);
+    const newBlog = Object.fromEntries(formData.entries());
+    newBlog.email = user?.email;
+
+    axios
+      .post(`${import.meta.env.VITE_API_URL}/add-blog`, newBlog)
+      .then((data) => {
+        console.log(data);
+        Swal.fire({
+          title: "Good job!",
+          text: "Data Added Successfully",
+          icon: "success",
+        });
+        navigate("/");
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   };
   return (
     <section className="py-20 bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 relative overflow-hidden">
@@ -101,7 +128,7 @@ const AddBlogPage = () => {
           animate={gridInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
           transition={{ duration: 0.6 }}
         >
-          <form>
+          <form onSubmit={handleAddBlog}>
             <div className="grid grid-cols-2 gap-3 md:gap-5">
               <div className="col-span-2">
                 {/* Blog Title */}
