@@ -37,7 +37,8 @@ const AddBlogPage = () => {
     const form = e.target;
     const formData = new FormData(form);
     const newBlog = Object.fromEntries(formData.entries());
-    newBlog.email = user?.email;
+    newBlog.addedEmail = user?.email;
+    newBlog.addedUser = user?.displayName?.split(" ")[0];
 
     axios
       .post(`${import.meta.env.VITE_API_URL}/add-blog`, newBlog)
@@ -190,7 +191,7 @@ const AddBlogPage = () => {
                     rows="1"
                     className="textarea textarea-bordered w-full border-blue-300"
                     placeholder="Enter the short details"
-                    name="short details"
+                    name="shortDetails"
                     required
                   />
                 </fieldset>
@@ -205,7 +206,7 @@ const AddBlogPage = () => {
                     rows="6"
                     className="textarea textarea-bordered border-blue-300 w-full"
                     placeholder="Enter the details"
-                    name="blog details"
+                    name="blogDetails"
                     required
                   />
                 </fieldset>
