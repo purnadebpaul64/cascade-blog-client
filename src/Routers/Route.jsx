@@ -9,6 +9,7 @@ import ErrorPage from "../Pages/ErrorPage";
 import AllBlogsPage from "../Pages/AllBlogsPage";
 import BlogDetailPage from "../Pages/BlogDetailPage";
 import axios from "axios";
+import UpdateBlogPage from "../Pages/UpdateBlogPage";
 
 const router = createBrowserRouter([
   {
@@ -36,6 +37,16 @@ const router = createBrowserRouter([
           return res.data;
         },
         element: <BlogDetailPage></BlogDetailPage>,
+      },
+      {
+        path: "update-blog/:id",
+        loader: async ({ params }) => {
+          const res = await axios.get(
+            `${import.meta.env.VITE_API_URL}/single-blog/${params.id}`
+          );
+          return res.data;
+        },
+        element: <UpdateBlogPage></UpdateBlogPage>,
       },
     ],
   },

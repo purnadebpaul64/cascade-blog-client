@@ -1,6 +1,6 @@
 import { Calendar, Clock, User } from "lucide-react";
 import React, { use, useEffect, useState } from "react";
-import { useLoaderData } from "react-router";
+import { Link, useLoaderData } from "react-router";
 import { AuthContext } from "../Providers/AuthProviders";
 import axios from "axios";
 import Swal from "sweetalert2";
@@ -11,6 +11,15 @@ const BlogDetailPage = () => {
 
   const [commentText, setCommentText] = useState("");
   const [comments, setComments] = useState([]);
+
+  const formatDate = (dateString) => {
+    const date = new Date(dateString);
+    return date.toLocaleDateString("en-US", {
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+    });
+  };
 
   const blogData = useLoaderData();
   const {
@@ -86,18 +95,14 @@ const BlogDetailPage = () => {
             {shortDetails}
           </h2>
         </div>
-        <div className="flex items-center space-x-6 text-slate-500 mb-8">
+        <div className="flex items-center space-x-6 text-slate-400 mb-8">
           <div className="flex items-center space-x-2">
             <User className="h-4 w-4" />
             <span>{addedUser}</span>
           </div>
           <div className="flex items-center space-x-2">
             <Calendar className="h-4 w-4" />
-            <span>June 14, 2025</span>
-          </div>
-          <div className="flex items-center space-x-2">
-            <Clock className="h-4 w-4" />
-            <span>8 min read</span>
+            <span>{formatDate(createdAt)}</span>
           </div>
         </div>
         <div className="">
@@ -112,9 +117,12 @@ const BlogDetailPage = () => {
         </div>
         <div>
           {isOwner && (
-            <button className="mt-3 px-4 py-2 bg-blue-600 text-white rounded">
+            <Link
+              to={`/update-blog/${_id}`}
+              className="mt-3 px-4 py-2 bg-blue-600 text-white rounded"
+            >
               Update Blog
-            </button>
+            </Link>
           )}
         </div>
         <h3 className="text-2xl text-white font-semibold mb-4">Comments</h3>
