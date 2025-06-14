@@ -10,6 +10,7 @@ import AllBlogsPage from "../Pages/AllBlogsPage";
 import BlogDetailPage from "../Pages/BlogDetailPage";
 import axios from "axios";
 import UpdateBlogPage from "../Pages/UpdateBlogPage";
+import FeaturedBlogsPage from "../Pages/FeaturedBlogsPage";
 
 const router = createBrowserRouter([
   {
@@ -47,6 +48,10 @@ const router = createBrowserRouter([
           return res.data;
         },
         element: <UpdateBlogPage></UpdateBlogPage>,
+      },
+      {
+        path: "featured-blogs",
+        element: <FeaturedBlogsPage></FeaturedBlogsPage>,
       },
     ],
   },
