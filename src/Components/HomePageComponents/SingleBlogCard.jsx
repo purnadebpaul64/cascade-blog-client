@@ -1,5 +1,6 @@
 import { Clock, Eye, Heart, Sparkles, Tag, User } from "lucide-react";
 import { motion } from "framer-motion";
+import { Link } from "react-router";
 
 const SingleBlogCard = ({ blog, index }) => {
   const getCategoryColor = (category) => {
@@ -115,9 +116,12 @@ const SingleBlogCard = ({ blog, index }) => {
       <div className="flex items-center px-6 pb-6 pt-0">
         <div className="flex items-center justify-between w-full">
           <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-            <button className="btn bg-gradient-to-r from-cyan-500 to-purple-500 hover:from-cyan-600 hover:to-purple-600 shadow-lg hover:shadow-cyan-500/25 border border-white/20 backdrop-blur-sm rounded-xl">
+            <Link
+              to={`/blog-details/${blog._id}`}
+              className="btn bg-gradient-to-r from-cyan-500 to-purple-500 hover:from-cyan-600 hover:to-purple-600 shadow-lg hover:shadow-cyan-500/25 border border-white/20 backdrop-blur-sm rounded-xl"
+            >
               Read Details
-            </button>
+            </Link>
           </motion.div>
           <motion.div whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }}>
             <button

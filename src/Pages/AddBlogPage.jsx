@@ -38,7 +38,7 @@ const AddBlogPage = () => {
     const formData = new FormData(form);
     const newBlog = Object.fromEntries(formData.entries());
     newBlog.addedEmail = user?.email;
-    newBlog.addedUser = user?.displayName?.split(" ")[0];
+    newBlog.addedUser = user?.displayName;
 
     axios
       .post(`${import.meta.env.VITE_API_URL}/add-blog`, newBlog)

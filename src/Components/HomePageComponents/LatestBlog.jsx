@@ -5,6 +5,7 @@ import { Sparkles } from "lucide-react";
 import axios from "axios";
 import SingleBlogCard from "./SingleBlogCard";
 const LatestBlog = () => {
+  const [loading, setLoading] = useState(true);
   const [latestBlogs, setLatestBlogs] = useState([]);
   const { ref: titleRef, inView: titleInView } = useInView({
     threshold: 0.3,
@@ -48,9 +49,11 @@ const LatestBlog = () => {
           `${import.meta.env.VITE_API_URL}/latest-blogs`
         );
         setLatestBlogs(response.data);
-        console.log(response.data);
+        // console.log(response.data);
       } catch (error) {
         console.error("Error fetching blogs:", error);
+      } finally {
+        setLoading(false);
       }
     };
     fetchBlogs();
@@ -132,7 +135,7 @@ const LatestBlog = () => {
           initial="hidden"
           animate={gridInView ? "visible" : "hidden"}
         >
-          {latestBlogs.map((blog, index) => (
+          {/* {latestBlogs.map((blog, index) => (
             <motion.div
               key={blog._id}
               variants={cardVariants}
@@ -146,7 +149,30 @@ const LatestBlog = () => {
                 index={index}
               ></SingleBlogCard>
             </motion.div>
-          ))}
+          ))} */}
+          {loading
+            ? Array.from({ length: 6 }).map((_, index) => (
+                <div
+                  key={index}
+                  className="space-y-4 p-4 rounded-xl bg-white/10 border border-white/10 animate-pulse"
+                >
+                  <div className="skeleton h-48 w-full rounded-xl bg-white/20"></div>
+                  <div className="skeleton h-4 w-3/4 bg-white/20"></div>
+                  <div className="skeleton h-4 w-1/2 bg-white/20"></div>
+                  <div className="skeleton h-4 w-full bg-white/20"></div>
+                </div>
+              ))
+            : latestBlogs.map((blog, index) => (
+                <motion.div
+                  key={blog._id}
+                  variants={cardVariants}
+                  layout
+                  whileHover={{ y: -8 }}
+                  transition={{ type: "spring", stiffness: 300 }}
+                >
+                  <SingleBlogCard blog={blog} index={index} />
+                </motion.div>
+              ))}
         </motion.div>
       </div>
     </section>

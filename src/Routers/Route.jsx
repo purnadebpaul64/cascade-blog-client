@@ -6,6 +6,9 @@ import AuthLayout from "../Layouts/AuthLayout";
 import Login from "../Components/AuthComponents/Login";
 import Registration from "../Components/AuthComponents/Registration";
 import ErrorPage from "../Pages/ErrorPage";
+import AllBlogsPage from "../Pages/AllBlogsPage";
+import BlogDetailPage from "../Pages/BlogDetailPage";
+import axios from "axios";
 
 const router = createBrowserRouter([
   {
@@ -17,8 +20,22 @@ const router = createBrowserRouter([
         element: <HomePage></HomePage>,
       },
       {
-        path: "/add-blog",
+        path: "add-blog",
         element: <AddBlogPage></AddBlogPage>,
+      },
+      {
+        path: "all-blogs",
+        element: <AllBlogsPage></AllBlogsPage>,
+      },
+      {
+        path: "blog-details/:id",
+        loader: async ({ params }) => {
+          const res = await axios.get(
+            `${import.meta.env.VITE_API_URL}/single-blog/${params.id}`
+          );
+          return res.data;
+        },
+        element: <BlogDetailPage></BlogDetailPage>,
       },
     ],
   },
