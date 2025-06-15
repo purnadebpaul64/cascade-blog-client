@@ -7,6 +7,7 @@ import {
 } from "@tanstack/react-table";
 import axios from "axios";
 import { useNavigate } from "react-router";
+import { ChevronDown, ChevronsUpDown, ChevronUp } from "lucide-react";
 
 const FeaturedBlogsPage = () => {
   const [blogs, setBlogs] = useState([]);
@@ -92,8 +93,13 @@ const FeaturedBlogsPage = () => {
                         header.column.columnDef.header,
                         header.getContext()
                       )}
-                      {header.column.getIsSorted() === "asc" ? " 🔼" : ""}
-                      {header.column.getIsSorted() === "desc" ? " 🔽" : ""}
+                      {header.column.getIsSorted() === "desc" ? (
+                        <ChevronUp className="w-4 h-4 inline" />
+                      ) : header.column.getIsSorted() === "asc" ? (
+                        <ChevronDown className="w-4 h-4 inline" />
+                      ) : (
+                        <ChevronsUpDown className="w-4 h-4 inline" />
+                      )}
                     </th>
                   ))}
                 </tr>

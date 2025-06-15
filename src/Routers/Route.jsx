@@ -11,6 +11,7 @@ import BlogDetailPage from "../Pages/BlogDetailPage";
 import axios from "axios";
 import UpdateBlogPage from "../Pages/UpdateBlogPage";
 import FeaturedBlogsPage from "../Pages/FeaturedBlogsPage";
+import WishlistPage from "../Pages/WishlistPage";
 
 const router = createBrowserRouter([
   {
@@ -52,6 +53,10 @@ const router = createBrowserRouter([
       {
         path: "featured-blogs",
         element: <FeaturedBlogsPage></FeaturedBlogsPage>,
+      },
+      {
+        path: "wishlist",
+        element: <WishlistPage></WishlistPage>,
       },
     ],
   },
