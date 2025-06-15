@@ -1,12 +1,15 @@
-import React, { useEffect, useState } from "react";
+import React, { use, useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { useInView } from "react-intersection-observer";
 import { Sparkles } from "lucide-react";
 import axios from "axios";
 import SingleBlogCard from "./SingleBlogCard";
+import { AuthContext } from "../../Providers/AuthProviders";
 const LatestBlog = () => {
   const [loading, setLoading] = useState(true);
   const [latestBlogs, setLatestBlogs] = useState([]);
+  const { user } = use(AuthContext);
+  const [wishlistIds, setWishlistIds] = useState([]);
   const { ref: titleRef, inView: titleInView } = useInView({
     threshold: 0.3,
     triggerOnce: true,
@@ -60,7 +63,21 @@ const LatestBlog = () => {
   }, []);
 
   const latestBlogsData = axios(`${import.meta.env.VITE_API_URL}/latest-blogs`);
-  console.log(latestBlogsData);
+  // console.log(latestBlogsData);
+
+  useEffect(() => {
+    const fetchWishlist = async () => {
+      if (!user?.email) return;
+
+      const response = await axios.get(
+        `${import.meta.env.VITE_API_URL}/wishlist/${user.email}`
+      );
+      const ids = response.data.map((blog) => blog._id);
+      setWishlistIds(ids);
+    };
+
+    fetchWishlist();
+  }, [user]);
 
   return (
     <section className="py-20 bg-gradient-to-br from-slate-800 via-gray-900 to-slate-800 relative overflow-hidden">
@@ -135,21 +152,6 @@ const LatestBlog = () => {
           initial="hidden"
           animate={gridInView ? "visible" : "hidden"}
         >
-          {/* {latestBlogs.map((blog, index) => (
-            <motion.div
-              key={blog._id}
-              variants={cardVariants}
-              layout
-              whileHover={{ y: -8 }}
-              transition={{ type: "spring", stiffness: 300 }}
-            >
-              <SingleBlogCard
-                key={blog._id}
-                blog={blog}
-                index={index}
-              ></SingleBlogCard>
-            </motion.div>
-          ))} */}
           {loading
             ? Array.from({ length: 6 }).map((_, index) => (
                 <div
@@ -170,7 +172,11 @@ const LatestBlog = () => {
                   whileHover={{ y: -8 }}
                   transition={{ type: "spring", stiffness: 300 }}
                 >
-                  <SingleBlogCard blog={blog} index={index} />
+                  <SingleBlogCard
+                    blog={blog}
+                    index={index}
+                    isWishlistedByUser={wishlistIds.includes(blog._id)}
+                  />
                 </motion.div>
               ))}
         </motion.div>

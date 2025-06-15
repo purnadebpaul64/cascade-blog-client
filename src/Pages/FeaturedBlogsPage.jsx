@@ -6,11 +6,12 @@ import {
   flexRender,
 } from "@tanstack/react-table";
 import axios from "axios";
-import { section } from "motion/react-client";
+import { useNavigate } from "react-router";
 
 const FeaturedBlogsPage = () => {
   const [blogs, setBlogs] = useState([]);
   const [sorting, setSorting] = useState([]);
+  const navigate = useNavigate();
 
   useEffect(() => {
     axios.get(`${import.meta.env.VITE_API_URL}/featured-blogs`).then((res) => {
@@ -21,17 +22,38 @@ const FeaturedBlogsPage = () => {
   const columns = useMemo(
     () => [
       {
+        accessorKey: "photo",
+        header: "Photo",
+        cell: ({ getValue }) => (
+          <img
+            src={getValue()}
+            alt="Blog"
+            className="w-24 h-12 md:w-48 md:h-24 object-cover rounded-md border border-white/20"
+          />
+        ),
+      },
+      {
         accessorKey: "title",
         header: "Title",
+        cell: ({ row }) => (
+          <span className="text-cyan-300 text-xs md:text-lg font-semibold cursor-pointer hover:underline">
+            {row.original.title}
+          </span>
+        ),
       },
       {
         accessorKey: "category",
         header: "Category",
+        cell: ({ row }) => (
+          <span className="text-white text-xs md:text-lg font-semibold cursor-pointer hover:underline">
+            {row.original.category}
+          </span>
+        ),
       },
-      {
-        accessorKey: "shortDetails",
-        header: "Short Details",
-      },
+      // {
+      //   accessorKey: "shortDetails",
+      //   header: "Short Details",
+      // },
       {
         accessorKey: "wordCount",
         header: "Word Count",
@@ -64,7 +86,7 @@ const FeaturedBlogsPage = () => {
                     <th
                       key={header.id}
                       onClick={header.column.getToggleSortingHandler()}
-                      className="p-3 text-left cursor-pointer"
+                      className="p-3 text-left cursor-pointer text-[14px] sm:text-lg"
                     >
                       {flexRender(
                         header.column.columnDef.header,
@@ -81,7 +103,8 @@ const FeaturedBlogsPage = () => {
               {table.getRowModel().rows.map((row) => (
                 <tr
                   key={row.id}
-                  className="border-t bg-white/5 backdrop-blur-xl"
+                  className="border-t bg-white/5 backdrop-blur-xl cursor-pointer hover:bg-white/10"
+                  onClick={() => navigate(`/blog-details/${row.original._id}`)}
                 >
                   {row.getVisibleCells().map((cell) => (
                     <td key={cell.id} className="p-3">

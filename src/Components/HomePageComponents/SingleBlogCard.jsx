@@ -1,8 +1,12 @@
 import { Clock, Eye, Heart, Sparkles, Tag, User } from "lucide-react";
 import { motion } from "framer-motion";
 import { Link } from "react-router";
+import { use, useEffect, useState } from "react";
+import { AuthContext } from "../../Providers/AuthProviders";
+import axios from "axios";
 
-const SingleBlogCard = ({ blog, index }) => {
+const SingleBlogCard = ({ blog, index, isWishlistedByUser = false }) => {
+  const { user } = use(AuthContext);
   const getCategoryColor = (category) => {
     switch (category) {
       case "Technology":
@@ -25,9 +29,32 @@ const SingleBlogCard = ({ blog, index }) => {
   const createdAt = blog.createdAt;
   const publishDate = new Date(createdAt);
   const currentDate = new Date();
-
   const diffTime = currentDate - publishDate;
   const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+
+  // const [isWishlisted, setIsWishlisted] = useState(blog.isWishlisted || false);
+  const [isWishlisted, setIsWishlisted] = useState(isWishlistedByUser);
+
+  useEffect(() => {
+    setIsWishlisted(isWishlistedByUser); // re-sync if parent updates
+  }, [isWishlistedByUser]);
+
+  const toggleWishlist = async (blogId) => {
+    try {
+      const response = await axios.post(
+        `${import.meta.env.VITE_API_URL}/wishlist`,
+        {
+          blogId,
+          userEmail: user.email,
+        }
+      );
+
+      setIsWishlisted(response.data.wished);
+    } catch (error) {
+      console.error("Error toggling wishlist:", error);
+    }
+  };
+
   return (
     <div className="group hover:shadow-2xl hover:shadow-cyan-500/25 transition-all duration-500 overflow-hidden shadow-lg backdrop-blur-lg bg-white/10 border border-white/20 hover:bg-white/20 hover:border-white/30 h-full rounded-lg text-[#121923]">
       <div className="p-6">
@@ -127,21 +154,16 @@ const SingleBlogCard = ({ blog, index }) => {
             <button
               onClick={() => toggleWishlist(blog._id)}
               className={`btn btn-outline btn-sm backdrop-blur-sm border-2 rounded-xl ${
-                blog.isWishlisted
+                isWishlisted
                   ? "text-red-400 border-red-400 bg-red-400/10 hover:bg-red-400/20"
                   : "text-white/60 border-white/30 bg-white/5 hover:text-red-400 hover:border-red-400"
               }`}
             >
-              <motion.div
-                animate={blog.isWishlisted ? { scale: [1, 1.2, 1] } : {}}
-                transition={{ duration: 0.3 }}
-              >
-                <Heart
-                  className={`h-4 w-4 transition-all duration-300 ${
-                    blog.isWishlisted ? "fill-current" : ""
-                  }`}
-                />
-              </motion.div>
+              <Heart
+                className={`h-4 w-4 transition-all duration-300 ${
+                  isWishlisted ? "fill-current" : ""
+                }`}
+              />
             </button>
           </motion.div>
         </div>

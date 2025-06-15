@@ -1,9 +1,10 @@
-import React, { useEffect, useState } from "react";
+import React, { use, useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { useInView } from "react-intersection-observer";
 import { Sparkles, Search } from "lucide-react";
 import axios from "axios";
 import SingleBlogCard from "../Components/HomePageComponents/SingleBlogCard";
+import { AuthContext } from "../Providers/AuthProviders";
 
 const categories = [
   "All",
@@ -19,6 +20,8 @@ const AllBlogsPage = () => {
   const [blogs, setBlogs] = useState([]);
   const [search, setSearch] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("All");
+  const { user } = use(AuthContext);
+  const [wishlistIds, setWishlistIds] = useState([]);
 
   const { ref: titleRef, inView: titleInView } = useInView({
     threshold: 0.3,
@@ -42,6 +45,20 @@ const AllBlogsPage = () => {
   useEffect(() => {
     fetchBlogs();
   }, [search, selectedCategory]);
+
+  useEffect(() => {
+    const fetchWishlist = async () => {
+      if (!user?.email) return;
+
+      const response = await axios.get(
+        `${import.meta.env.VITE_API_URL}/wishlist/${user.email}`
+      );
+      const ids = response.data.map((blog) => blog._id);
+      setWishlistIds(ids);
+    };
+
+    fetchWishlist();
+  }, [user]);
 
   return (
     <section className="py-20 bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 relative overflow-hidden">
@@ -132,7 +149,12 @@ const AllBlogsPage = () => {
             </p>
           ) : (
             blogs.map((blog, index) => (
-              <SingleBlogCard key={blog._id} blog={blog} index={index} />
+              <SingleBlogCard
+                key={blog._id}
+                blog={blog}
+                index={index}
+                isWishlistedByUser={wishlistIds.includes(blog._id)}
+              />
             ))
           )}
         </div>
