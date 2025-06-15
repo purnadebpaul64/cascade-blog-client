@@ -1,4 +1,4 @@
-import { Calendar, Clock, User } from "lucide-react";
+import { Calendar, User } from "lucide-react";
 import React, { use, useEffect, useState } from "react";
 import { Link, useLoaderData } from "react-router";
 import { AuthContext } from "../Providers/AuthProviders";
@@ -8,8 +8,6 @@ import { Helmet } from "react-helmet-async";
 
 const BlogDetailPage = () => {
   const { user } = use(AuthContext);
-  console.log(user);
-
   const [commentText, setCommentText] = useState("");
   const [comments, setComments] = useState([]);
 
@@ -46,7 +44,28 @@ const BlogDetailPage = () => {
 
   const handleCommentSubmit = async (e) => {
     e.preventDefault();
-    if (!commentText) return;
+
+    if (!user) {
+      Swal.fire({
+        icon: "warning",
+        title: "Login Required",
+        text: "Please log in to post a comment.",
+        confirmButtonColor: "#3085d6",
+      });
+      return;
+    }
+
+    if (isOwner) {
+      Swal.fire({
+        icon: "info",
+        title: "Not Allowed",
+        text: "You cannot comment on your own blog.",
+        confirmButtonColor: "#3085d6",
+      });
+      return;
+    }
+
+    if (!commentText.trim()) return;
 
     const newComment = {
       blogId: _id,
@@ -58,7 +77,7 @@ const BlogDetailPage = () => {
 
     try {
       await axios.post(`${import.meta.env.VITE_API_URL}/comments`, newComment);
-      setCommentText(""); // clear input
+      setCommentText("");
       const res = await axios.get(
         `${import.meta.env.VITE_API_URL}/comments/${_id}`
       );
@@ -76,7 +95,7 @@ const BlogDetailPage = () => {
       Swal.fire({
         icon: "error",
         title: "Oops...",
-        text: err,
+        text: err.message || "Something went wrong!",
         confirmButtonColor: "#d33",
       });
     }
@@ -110,7 +129,7 @@ const BlogDetailPage = () => {
               <span>{formatDate(createdAt)}</span>
             </div>
           </div>
-          <div className="">
+          <div>
             <img
               className="object-cover rounded-2xl shadow-lg h-96 w-full"
               src={photo}
@@ -130,28 +149,24 @@ const BlogDetailPage = () => {
               </Link>
             )}
           </div>
+
           <h3 className="text-2xl text-white font-semibold mb-4">Comments</h3>
-          {!isOwner ? (
-            <form onSubmit={handleCommentSubmit} className="mb-6">
-              <textarea
-                value={commentText}
-                onChange={(e) => setCommentText(e.target.value)}
-                className="w-full p-4 rounded-lg backdrop-blur-2xl bg-white/10 border-1 border-cyan-400 text-white"
-                placeholder="Write your comment here..."
-                rows="4"
-              />
-              <button
-                type="submit"
-                className="mt-2 px-4 py-2 bg-green-600 text-white rounded"
-              >
-                Post Comment
-              </button>
-            </form>
-          ) : (
-            <p className="text-red-500 font-semibold">
-              You cannot comment on your own blog.
-            </p>
-          )}
+
+          <form onSubmit={handleCommentSubmit} className="mb-6">
+            <textarea
+              value={commentText}
+              onChange={(e) => setCommentText(e.target.value)}
+              className="w-full p-4 rounded-lg backdrop-blur-2xl bg-white/10 border-1 border-cyan-400 text-white"
+              placeholder="Write your comment here..."
+              rows="4"
+            />
+            <button
+              type="submit"
+              className="mt-2 px-4 py-2 bg-green-600 text-white rounded"
+            >
+              Post Comment
+            </button>
+          </form>
 
           <div className="space-y-4">
             {comments.length > 0 ? (

@@ -139,7 +139,7 @@ const AllBlogsPage = () => {
               className="px-4 py-2 rounded-full bg-white/10 border border-white/20 text-white/80 backdrop-blur-sm"
             >
               {categories.map((cat) => (
-                <option key={cat} value={cat}>
+                <option className="bg-black" key={cat} value={cat}>
                   {cat}
                 </option>
               ))}

@@ -1,4 +1,12 @@
-import { Clock, Eye, Heart, Sparkles, Tag, User } from "lucide-react";
+import {
+  BookmarkPlus,
+  Clock,
+  Eye,
+  Heart,
+  Sparkles,
+  Tag,
+  User,
+} from "lucide-react";
 import { motion } from "framer-motion";
 import { Link } from "react-router";
 import { use, useEffect, useState } from "react";
@@ -159,7 +167,7 @@ const SingleBlogCard = ({ blog, index, isWishlistedByUser = false }) => {
                   : "text-white/60 border-white/30 bg-white/5 hover:text-red-400 hover:border-red-400"
               }`}
             >
-              <Heart
+              <BookmarkPlus
                 className={`h-4 w-4 transition-all duration-300 ${
                   isWishlisted ? "fill-current" : ""
                 }`}

@@ -12,6 +12,7 @@ import axios from "axios";
 import UpdateBlogPage from "../Pages/UpdateBlogPage";
 import FeaturedBlogsPage from "../Pages/FeaturedBlogsPage";
 import WishlistPage from "../Pages/WishlistPage";
+import PrivateRoute from "../Providers/PrivateRoute";
 
 const router = createBrowserRouter([
   {
@@ -24,7 +25,11 @@ const router = createBrowserRouter([
       },
       {
         path: "add-blog",
-        element: <AddBlogPage></AddBlogPage>,
+        element: (
+          <PrivateRoute>
+            <AddBlogPage></AddBlogPage>
+          </PrivateRoute>
+        ),
       },
       {
         path: "all-blogs",
@@ -48,7 +53,11 @@ const router = createBrowserRouter([
           );
           return res.data;
         },
-        element: <UpdateBlogPage></UpdateBlogPage>,
+        element: (
+          <PrivateRoute>
+            <UpdateBlogPage></UpdateBlogPage>
+          </PrivateRoute>
+        ),
       },
       {
         path: "featured-blogs",
@@ -56,7 +65,11 @@ const router = createBrowserRouter([
       },
       {
         path: "wishlist",
-        element: <WishlistPage></WishlistPage>,
+        element: (
+          <PrivateRoute>
+            <WishlistPage></WishlistPage>
+          </PrivateRoute>
+        ),
       },
     ],
   },
