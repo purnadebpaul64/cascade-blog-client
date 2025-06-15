@@ -8,6 +8,7 @@ import axios from "axios";
 import { useNavigate } from "react-router";
 import Swal from "sweetalert2";
 import { AuthContext } from "../Providers/AuthProviders";
+import { Helmet } from "react-helmet-async";
 
 const WishlistPage = () => {
   const [wishlistBlogs, setWishlistBlogs] = useState([]);
@@ -101,53 +102,58 @@ const WishlistPage = () => {
   });
 
   return (
-    <section className="py-20 bg-gradient-to-br from-slate-900 via-indigo-900 to-slate-900 relative overflow-hidden">
-      <div className="w-11/12 mx-auto">
-        <h2 className="text-2xl font-bold mb-4">Your Wishlisted Blogs</h2>
-        {wishlistBlogs.length === 0 ? (
-          <p className="text-white text-center">No blogs in your wishlist.</p>
-        ) : (
-          <div className="overflow-x-auto">
-            <table className="min-w-full border border-cyan-300">
-              <thead>
-                {table.getHeaderGroups().map((headerGroup) => (
-                  <tr key={headerGroup.id} className="bg-white/20">
-                    {headerGroup.headers.map((header) => (
-                      <th
-                        key={header.id}
-                        className="p-3 text-left text-[14px] sm:text-lg"
-                      >
-                        {flexRender(
-                          header.column.columnDef.header,
-                          header.getContext()
-                        )}
-                      </th>
-                    ))}
-                  </tr>
-                ))}
-              </thead>
-              <tbody>
-                {table.getRowModel().rows.map((row) => (
-                  <tr
-                    key={row.id}
-                    className="border-t bg-white/5 backdrop-blur-xl hover:bg-white/10 transition-all"
-                  >
-                    {row.getVisibleCells().map((cell) => (
-                      <td key={cell.id} className="p-3">
-                        {flexRender(
-                          cell.column.columnDef.cell,
-                          cell.getContext()
-                        )}
-                      </td>
-                    ))}
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        )}
-      </div>
-    </section>
+    <>
+      <Helmet>
+        <title>Your WIshlist</title>
+      </Helmet>
+      <section className="py-20 bg-gradient-to-br from-slate-900 via-indigo-900 to-slate-900 relative overflow-hidden">
+        <div className="w-11/12 mx-auto">
+          <h2 className="text-2xl font-bold mb-4">Your Wishlisted Blogs</h2>
+          {wishlistBlogs.length === 0 ? (
+            <p className="text-white text-center">No blogs in your wishlist.</p>
+          ) : (
+            <div className="overflow-x-auto">
+              <table className="min-w-full border border-cyan-300">
+                <thead>
+                  {table.getHeaderGroups().map((headerGroup) => (
+                    <tr key={headerGroup.id} className="bg-white/20">
+                      {headerGroup.headers.map((header) => (
+                        <th
+                          key={header.id}
+                          className="p-3 text-left text-[14px] sm:text-lg"
+                        >
+                          {flexRender(
+                            header.column.columnDef.header,
+                            header.getContext()
+                          )}
+                        </th>
+                      ))}
+                    </tr>
+                  ))}
+                </thead>
+                <tbody>
+                  {table.getRowModel().rows.map((row) => (
+                    <tr
+                      key={row.id}
+                      className="border-t bg-white/5 backdrop-blur-xl hover:bg-white/10 transition-all"
+                    >
+                      {row.getVisibleCells().map((cell) => (
+                        <td key={cell.id} className="p-3">
+                          {flexRender(
+                            cell.column.columnDef.cell,
+                            cell.getContext()
+                          )}
+                        </td>
+                      ))}
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          )}
+        </div>
+      </section>
+    </>
   );
 };
 

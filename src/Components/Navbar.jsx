@@ -9,19 +9,20 @@ import {
   Menu,
   X,
 } from "lucide-react";
-import React, { use, useState } from "react";
+import React, { useState, useContext } from "react";
 import { Link, NavLink } from "react-router";
 import { AuthContext } from "../Providers/AuthProviders";
 import Swal from "sweetalert2";
 
 const Navbar = () => {
-  const { user, logOut } = use(AuthContext);
+  const { user, loading, logOut } = useContext(AuthContext);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+
   const handleLogout = () => {
     logOut()
       .then(() => {
         Swal.fire({
-          title: "Loged Out Successfully",
+          title: "Logged Out Successfully",
           icon: "success",
           showConfirmButton: false,
           timer: 1500,
@@ -31,8 +32,9 @@ const Navbar = () => {
         alert(error);
       });
   };
+
   return (
-    <section className=" w-full border-b border-[#1F2531] bg-[#05080B]/85 backdrop-blur-md shadow-sm">
+    <section className="w-full border-b border-[#1F2531] bg-[#05080B]/85 backdrop-blur-md shadow-sm">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex h-16 items-center justify-between">
           {/* Logo */}
@@ -43,6 +45,7 @@ const Navbar = () => {
               </h1>
             </Link>
           </div>
+
           {/* Desktop Navigation */}
           <div className="hidden lg:flex items-center space-x-6">
             <ul className="menu menu-horizontal gap-5 px-1 font-bold">
@@ -58,7 +61,7 @@ const Navbar = () => {
                 className="flex items-center space-x-1 text-[#757D85] hover:text-primary transition-colors font-medium px-3 py-2 rounded-md hover:bg-accent"
               >
                 <FileText className="h-4 w-4" />
-                <span>All blogs</span>
+                <span>All Blogs</span>
               </NavLink>
               <NavLink
                 to={"/featured-blogs"}
@@ -67,60 +70,77 @@ const Navbar = () => {
                 <Gem className="h-4 w-4" />
                 <span>Featured Blogs</span>
               </NavLink>
-              {user && (
+
+              {loading ? (
                 <>
-                  <NavLink
-                    to={"/add-blog"}
-                    className="flex items-center space-x-1 text-[#757D85] hover:text-primary transition-colors font-medium px-3 py-2 rounded-md hover:bg-accent"
-                  >
-                    <CirclePlus className="h-4 w-4" />
-                    <span>Add Blog</span>
-                  </NavLink>
-                  <NavLink
-                    to={"/wishlist"}
-                    className="flex items-center space-x-1 text-[#757D85] hover:text-primary transition-colors font-medium px-3 py-2 rounded-md hover:bg-accent"
-                  >
-                    <BookmarkCheck className="h-4 w-4" />
-                    <span>Wishlist</span>
-                  </NavLink>
+                  <div className="skeleton h-8 w-24 rounded-md"></div>
+                  <div className="skeleton h-8 w-24 rounded-md"></div>
                 </>
+              ) : (
+                user && (
+                  <>
+                    <NavLink
+                      to="/add-blog"
+                      className="flex items-center space-x-1 text-[#757D85] hover:text-primary transition-colors font-medium px-3 py-2 rounded-md hover:bg-accent"
+                    >
+                      <CirclePlus className="h-4 w-4" />
+                      <span>Add Blog</span>
+                    </NavLink>
+                    <NavLink
+                      to="/wishlist"
+                      className="flex items-center space-x-1 text-[#757D85] hover:text-primary transition-colors font-medium px-3 py-2 rounded-md hover:bg-accent"
+                    >
+                      <BookmarkCheck className="h-4 w-4" />
+                      <span>Wishlist</span>
+                    </NavLink>
+                  </>
+                )
               )}
             </ul>
           </div>
+
           {/* Desktop Actions */}
           <div className="hidden lg:flex items-center space-x-4">
-            {user ? (
-              <div className="flex items-center space-x-3">
-                <div
-                  className="w-8 h-8 rounded-full bg-gradient-to-r from-blue-500 to-purple-500 flex items-center justify-center tooltip tooltip-bottom"
-                  data-tip={user.displayName}
-                >
-                  <img src={user.photoURL} alt={user.displayName} />
+            {!loading ? (
+              user ? (
+                <div className="flex items-center space-x-3">
+                  <div
+                    className="w-8 h-8 rounded-full bg-gradient-to-r from-blue-500 to-purple-500 flex items-center justify-center tooltip tooltip-bottom"
+                    data-tip={user.displayName}
+                  >
+                    <img
+                      src={user.photoURL}
+                      alt={user.displayName}
+                      className="w-full h-full rounded-full object-cover"
+                    />
+                  </div>
+                  <button
+                    className="btn btn-outline btn-sm"
+                    onClick={handleLogout}
+                  >
+                    <LogOut className="h-4 w-4 mr-1" />
+                    Logout
+                  </button>
                 </div>
-                <button
-                  className="btn btn-outline btn-sm"
-                  onClick={handleLogout}
-                >
-                  <LogOut className="h-4 w-4 mr-1" />
-                  Logout
-                </button>
-              </div>
+              ) : (
+                <div className="flex items-center space-x-2">
+                  <Link to={"/auth"} className="btn btn-outline btn-sm">
+                    <LogIn className="h-4 w-4 mr-1" />
+                    <p>Login</p>
+                  </Link>
+                  <Link
+                    to={"/auth/registration"}
+                    className="btn btn-sm bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700"
+                  >
+                    Register
+                  </Link>
+                </div>
+              )
             ) : (
-              <div className="flex items-center space-x-2">
-                <Link to={"/auth"} className="btn btn-outline btn-sm">
-                  <LogIn className="h-4 w-4 mr-1" />
-                  <p>Login</p>
-                </Link>
-
-                <Link
-                  to={"/auth/registration"}
-                  className="btn btn-sm bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700"
-                >
-                  Register
-                </Link>
-              </div>
+              <div className="skeleton h-8 w-20 rounded-lg"></div>
             )}
           </div>
+
           {/* Mobile menu button */}
           <div className="lg:hidden flex items-center space-x-2">
             <button
@@ -135,10 +155,11 @@ const Navbar = () => {
             </button>
           </div>
         </div>
+
         {/* Mobile Navigation */}
         {isMenuOpen && (
           <div className="lg:hidden">
-            <div className=" pt-2 pb-3 space-y-1 bg-background border-t border-[#1F2531]">
+            <div className="pt-2 pb-3 space-y-1 bg-background border-t border-[#1F2531]">
               <ul>
                 <NavLink
                   to={"/"}
@@ -149,65 +170,108 @@ const Navbar = () => {
                 </NavLink>
                 <NavLink
                   to={"/all-blogs"}
-                  className="flex items-center space-x-1 text-[#757D85] hover:text-primary transition-colors font-medium px-3 py-2 rounded-md hover:bg-accent"
+                  className="flex items-center space-x-1 text-[#757D85] hover:text-primary transition-colors px-3 py-2 rounded-md hover:bg-accent"
                 >
                   <FileText className="h-4 w-4" />
-                  <span>All blogs</span>
+                  <span>All Blogs</span>
                 </NavLink>
                 <NavLink
                   to={"/featured-blogs"}
-                  className="flex items-center space-x-1 text-[#757D85] hover:text-primary transition-colors font-medium px-3 py-2 rounded-md hover:bg-accent"
+                  className="flex items-center space-x-1 text-[#757D85] hover:text-primary transition-colors px-3 py-2 rounded-md hover:bg-accent"
                 >
                   <Gem className="h-4 w-4" />
                   <span>Featured Blogs</span>
                 </NavLink>
-                {user && (
+
+                {/* {!loading && user && (
                   <>
                     <NavLink
                       to={"/add-blog"}
-                      className="flex items-center space-x-1 text-[#757D85] hover:text-primary transition-colors font-medium px-3 py-2 rounded-md hover:bg-accent"
+                      className="flex items-center space-x-1 text-[#757D85] hover:text-primary transition-colors px-3 py-2 rounded-md hover:bg-accent"
                     >
                       <CirclePlus className="h-4 w-4" />
                       <span>Add Blog</span>
                     </NavLink>
                     <NavLink
                       to={"/wishlist"}
-                      className="flex items-center space-x-1 text-[#757D85] hover:text-primary transition-colors font-medium px-3 py-2 rounded-md hover:bg-accent"
+                      className="flex items-center space-x-1 text-[#757D85] hover:text-primary transition-colors px-3 py-2 rounded-md hover:bg-accent"
                     >
                       <BookmarkCheck className="h-4 w-4" />
                       <span>Wishlist</span>
                     </NavLink>
                   </>
+                )} */}
+
+                {loading ? (
+                  <>
+                    <div className="skeleton h-8 w-24 mx-3 my-2 rounded-md"></div>
+                    <div className="skeleton h-8 w-24 mx-3 my-2 rounded-md"></div>
+                  </>
+                ) : (
+                  user && (
+                    <>
+                      <NavLink
+                        to={"/add-blog"}
+                        className="flex items-center space-x-1 text-[#757D85] hover:text-primary transition-colors px-3 py-2 rounded-md hover:bg-accent"
+                      >
+                        <CirclePlus className="h-4 w-4" />
+                        <span>Add Blog</span>
+                      </NavLink>
+                      <NavLink
+                        to={"/wishlist"}
+                        className="flex items-center space-x-1 text-[#757D85] hover:text-primary transition-colors px-3 py-2 rounded-md hover:bg-accent"
+                      >
+                        <BookmarkCheck className="h-4 w-4" />
+                        <span>Wishlist</span>
+                      </NavLink>
+                    </>
+                  )
                 )}
               </ul>
+
+              {/* Mobile Login/Logout */}
               <div className="pt-4 space-y-2 border-t border-[#1F2531]">
-                {user ? (
-                  <div className="space-y-2">
-                    <div className="flex items-center space-x-2 px-3 py-2">
-                      <div className="w-6 h-6 rounded-full bg-gradient-to-r from-blue-500 to-purple-500 flex items-center justify-center">
-                        <img src={user.photoURL} alt={user.displayName} />
+                {!loading ? (
+                  user ? (
+                    <div className="space-y-2 px-3">
+                      <div className="flex items-center space-x-2">
+                        <div className="w-6 h-6 rounded-full bg-gradient-to-r from-blue-500 to-purple-500 flex items-center justify-center">
+                          <img
+                            src={user.photoURL}
+                            alt={user.displayName}
+                            className="w-full h-full rounded-full object-cover"
+                          />
+                        </div>
+                        <span className="text-sm text-muted-foreground">
+                          {user.displayName}
+                        </span>
                       </div>
-                      <span className="text-sm text-muted-foreground">
-                        Profile
-                      </span>
+                      <button
+                        className="w-full btn btn-outline"
+                        onClick={handleLogout}
+                      >
+                        <LogOut className="h-4 w-4 mr-1" />
+                        Logout
+                      </button>
                     </div>
-                    <button
-                      className="w-full btn btn-outline"
-                      onClick={handleLogout}
-                    >
-                      <LogOut className="h-4 w-4 mr-1" />
-                      Logout
-                    </button>
-                  </div>
+                  ) : (
+                    <div className="space-y-2 px-3">
+                      <Link to={"/auth"} className="w-full btn btn-outline">
+                        <LogIn className="h-4 w-4 mr-1" />
+                        Login
+                      </Link>
+                      <Link
+                        to={"/auth/registration"}
+                        className="btn w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700"
+                      >
+                        Register
+                      </Link>
+                    </div>
+                  )
                 ) : (
-                  <div className="space-y-2">
-                    <button className="w-full btn btn-outline">
-                      <LogIn className="h-4 w-4 mr-1" />
-                      Login
-                    </button>
-                    <button className="btn btn-md bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 w-full">
-                      Register
-                    </button>
+                  <div className="px-3">
+                    <div className="skeleton h-8 w-full rounded-lg"></div>
+                    <div className="skeleton h-8 w-full rounded-lg mt-2"></div>
                   </div>
                 )}
               </div>
