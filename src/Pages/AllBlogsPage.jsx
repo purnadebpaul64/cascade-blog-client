@@ -1,4 +1,4 @@
-import React, { use, useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import { motion } from "framer-motion";
 import { useInView } from "react-intersection-observer";
 import { Sparkles, Search } from "lucide-react";
@@ -19,9 +19,13 @@ const categories = [
 
 const AllBlogsPage = () => {
   const [blogs, setBlogs] = useState([]);
+  const [searchTerm, setSearchTerm] = useState("");
   const [search, setSearch] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("All");
-  const { user } = use(AuthContext);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+
+  const { user } = useContext(AuthContext);
   const [wishlistIds, setWishlistIds] = useState([]);
 
   const { ref: titleRef, inView: titleInView } = useInView({
@@ -29,7 +33,17 @@ const AllBlogsPage = () => {
     triggerOnce: true,
   });
 
+  // Debounce searchTerm -> search
+  useEffect(() => {
+    const handler = setTimeout(() => {
+      setSearch(searchTerm.trim());
+    }, 400);
+    return () => clearTimeout(handler);
+  }, [searchTerm]);
+
   const fetchBlogs = async () => {
+    setLoading(true);
+    setError(null);
     try {
       const res = await axios.get(`${import.meta.env.VITE_API_URL}/blogs`, {
         params: {
@@ -39,7 +53,10 @@ const AllBlogsPage = () => {
       });
       setBlogs(res.data);
     } catch (err) {
+      setError("Failed to fetch blogs. Please try again.");
       console.error("Error fetching blogs", err);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -51,11 +68,16 @@ const AllBlogsPage = () => {
     const fetchWishlist = async () => {
       if (!user?.email) return;
 
-      const response = await axios.get(
-        `${import.meta.env.VITE_API_URL}/wishlist/${user.email}`
-      );
-      const ids = response.data.map((blog) => blog._id);
-      setWishlistIds(ids);
+      try {
+        const response = await axios.get(
+          `${import.meta.env.VITE_API_URL}/wishlist/${user.email}`
+        );
+        // Convert _id to string to avoid issues
+        const ids = response.data.map((blog) => blog._id.toString());
+        setWishlistIds(ids);
+      } catch (err) {
+        console.error("Error fetching wishlist", err);
+      }
     };
 
     fetchWishlist();
@@ -70,7 +92,7 @@ const AllBlogsPage = () => {
         {/* Animated background mesh */}
         <div className="absolute inset-0">
           <motion.div
-            className="absolute top-0 left-1/4 w-64 h-64 bg-gradient-to-r  from-cyan-400/20 to-purple-400/20 rounded-full blur-3xl"
+            className="absolute top-0 left-1/4 w-64 h-64 bg-gradient-to-r from-cyan-400/20 to-purple-400/20 rounded-full blur-3xl"
             animate={{
               y: [-20, 20, -20],
               transition: { duration: 5, repeat: Infinity, ease: "easeInOut" },
@@ -98,7 +120,7 @@ const AllBlogsPage = () => {
         </div>
 
         {/* Grid pattern */}
-        <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.03)_1px,transparent_1px)] bg-[size:3rem_3rem]"></div>
+        <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.03)_1px,transparent_1px)] bg-[size:3rem_3rem]" />
 
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-12 relative z-10">
           {/* Header */}
@@ -129,8 +151,8 @@ const AllBlogsPage = () => {
                 type="text"
                 placeholder="Search blog titles..."
                 className="bg-transparent w-full focus:outline-none text-white placeholder:text-white/60"
-                value={search}
-                onChange={(e) => setSearch(e.target.value)}
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
               />
             </div>
             <select
@@ -147,22 +169,28 @@ const AllBlogsPage = () => {
           </div>
 
           {/* Blog Cards */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-            {blogs.length === 0 ? (
-              <p className="text-white/70 text-center col-span-full">
-                No blogs found.
-              </p>
-            ) : (
-              blogs.map((blog, index) => (
+          {loading ? (
+            <p className="text-white/70 text-center col-span-full">
+              Loading...
+            </p>
+          ) : error ? (
+            <p className="text-red-500 text-center col-span-full">{error}</p>
+          ) : blogs.length === 0 ? (
+            <p className="text-white/70 text-center col-span-full">
+              No blogs found.
+            </p>
+          ) : (
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+              {blogs.map((blog, index) => (
                 <SingleBlogCard
                   key={blog._id}
                   blog={blog}
                   index={index}
-                  isWishlistedByUser={wishlistIds.includes(blog._id)}
+                  isWishlistedByUser={wishlistIds.includes(blog._id.toString())}
                 />
-              ))
-            )}
-          </div>
+              ))}
+            </div>
+          )}
         </div>
       </section>
     </>
