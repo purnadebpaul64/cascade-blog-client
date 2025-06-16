@@ -14,11 +14,16 @@ const WishlistPage = () => {
   const [wishlistBlogs, setWishlistBlogs] = useState([]);
   const navigate = useNavigate();
   const { user } = useContext(AuthContext);
+  const accessToken = user.accessToken;
 
   useEffect(() => {
     if (user?.email) {
       axios
-        .get(`${import.meta.env.VITE_API_URL}/wishlist/${user.email}`)
+        .get(`${import.meta.env.VITE_API_URL}/wishlist/${user.email}`, {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        })
         .then((res) => {
           setWishlistBlogs(res.data);
         });

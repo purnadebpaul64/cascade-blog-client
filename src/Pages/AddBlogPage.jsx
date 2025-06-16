@@ -10,6 +10,7 @@ import { Helmet } from "react-helmet-async";
 
 const AddBlogPage = () => {
   const { user } = use(AuthContext);
+
   const navigate = useNavigate();
   const { ref: titleRef, inView: titleInView } = useInView({
     threshold: 0.3,
