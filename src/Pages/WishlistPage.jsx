@@ -14,7 +14,7 @@ const WishlistPage = () => {
   const [wishlistBlogs, setWishlistBlogs] = useState([]);
   const navigate = useNavigate();
   const { user } = useContext(AuthContext);
-  const accessToken = user.accessToken;
+  const accessToken = user?.accessToken;
 
   useEffect(() => {
     if (user?.email) {

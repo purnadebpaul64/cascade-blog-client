@@ -10,6 +10,7 @@ import { Helmet } from "react-helmet-async";
 
 const AddBlogPage = () => {
   const { user } = use(AuthContext);
+  const token = user?.accessToken;
 
   const navigate = useNavigate();
   const { ref: titleRef, inView: titleInView } = useInView({
@@ -43,7 +44,11 @@ const AddBlogPage = () => {
     newBlog.addedUser = user?.displayName;
 
     axios
-      .post(`${import.meta.env.VITE_API_URL}/add-blog`, newBlog)
+      .post(`${import.meta.env.VITE_API_URL}/add-blog`, newBlog, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
       .then((data) => {
         console.log(data);
         Swal.fire({

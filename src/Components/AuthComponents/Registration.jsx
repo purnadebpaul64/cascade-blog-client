@@ -1,12 +1,14 @@
 import { ArrowLeft } from "lucide-react";
 import React, { use, useState } from "react";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
-import { Link, useNavigate } from "react-router";
+import { Link, useLocation, useNavigate } from "react-router";
 import Swal from "sweetalert2";
 import { AuthContext } from "../../Providers/AuthProviders";
+import { GoogleAuthProvider } from "firebase/auth";
 
 const Registration = () => {
   const navigate = useNavigate();
+  const location = useLocation();
   const { createUser, setUser, updateUser, googleSignIn } = use(AuthContext);
   const [showPass, setShowPass] = useState(false);
   const [passError, setPassError] = useState([]);
@@ -66,6 +68,34 @@ const Registration = () => {
       .catch((error) => {
         const errorCode = error.code;
         const errorMessage = error.message;
+        Swal.fire({
+          icon: "error",
+          title: "Oops...",
+          text: `${errorMessage}`,
+        });
+      });
+  };
+
+  const handleGoogleSignIn = () => {
+    googleSignIn()
+      .then((result) => {
+        const credential = GoogleAuthProvider.credentialFromResult(result);
+        const token = credential.accessToken;
+        const user = result.user;
+        setUser(user);
+        navigate(location.state?.from?.pathname || "/");
+        Swal.fire({
+          title: "Loged In Successfully",
+          icon: "success",
+          showConfirmButton: false,
+          timer: 1500,
+        });
+      })
+      .catch((error) => {
+        const errorCode = error.code;
+        const errorMessage = error.message;
+        const email = error.customData.email;
+        const credential = GoogleAuthProvider.credentialFromError(error);
         Swal.fire({
           icon: "error",
           title: "Oops...",
@@ -156,7 +186,7 @@ const Registration = () => {
         <div className="divider">OR</div>
         <button
           onClick={() => {
-            googleSignIn();
+            handleGoogleSignIn();
           }}
           className="btn bg-white text-black border-[#e5e5e5]"
         >

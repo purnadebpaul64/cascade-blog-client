@@ -210,21 +210,6 @@ const TrendingTopic = () => {
                       <span className="text-sm">{topic.trend}</span>
                     </motion.div>
                   </div>
-
-                  {/* Floating indicator */}
-                  <AnimatePresence>
-                    {hoveredTopic === topic.id && (
-                      <motion.div
-                        className="absolute -top-2 -right-2 w-6 h-6 bg-gradient-to-r from-yellow-400 to-orange-500 rounded-full flex items-center justify-center"
-                        initial={{ scale: 0, rotate: -180 }}
-                        animate={{ scale: 1, rotate: 0 }}
-                        exit={{ scale: 0, rotate: 180 }}
-                        transition={{ type: "spring", stiffness: 300 }}
-                      >
-                        <Zap className="w-3 h-3 text-white" />
-                      </motion.div>
-                    )}
-                  </AnimatePresence>
                 </div>
 
                 <div className="relative p-6 pt-0">

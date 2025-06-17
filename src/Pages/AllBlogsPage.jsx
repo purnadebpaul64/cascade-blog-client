@@ -27,7 +27,7 @@ const AllBlogsPage = () => {
 
   const { user } = useContext(AuthContext);
   const [wishlistIds, setWishlistIds] = useState([]);
-  const accessToken = user.accessToken;
+  const accessToken = user?.accessToken;
 
   const { ref: titleRef, inView: titleInView } = useInView({
     threshold: 0.3,

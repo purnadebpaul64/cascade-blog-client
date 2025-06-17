@@ -14,6 +14,7 @@ const UpdateBlogPage = () => {
   const { _id, title, photo, category, blogDetails, shortDetails } = blogData;
 
   const { user } = use(AuthContext);
+  const token = user?.accessToken;
   const navigate = useNavigate();
   const { ref: titleRef, inView: titleInView } = useInView({
     threshold: 0.3,
@@ -43,7 +44,11 @@ const UpdateBlogPage = () => {
     const updatedBlog = Object.fromEntries(formData.entries());
 
     axios
-      .put(`${import.meta.env.VITE_API_URL}/update-blog/${_id}`, updatedBlog)
+      .put(`${import.meta.env.VITE_API_URL}/update-blog/${_id}`, updatedBlog, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
       .then((res) => {
         const data = res.data;
         if (data.modifiedCount) {

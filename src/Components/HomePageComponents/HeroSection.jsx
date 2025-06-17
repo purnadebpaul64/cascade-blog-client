@@ -1,6 +1,7 @@
 import { ArrowRight, Sparkles, Zap, TrendingUp } from "lucide-react";
 import { useInView } from "react-intersection-observer";
 import { motion } from "framer-motion";
+import { Link } from "react-router";
 
 const HeroSection = () => {
   const { ref: heroRef, inView: heroInView } = useInView({
@@ -104,11 +105,20 @@ const HeroSection = () => {
             creators and thought leaders.
           </motion.p>
           <motion.div className="space-x-4" variants={itemVariants}>
-            <button className="btn btn-md md:btn-lg bg-gradient-to-r from-blue-500 to-purple-500 hover:from-blue-600 hover:to-purple-600 shadow-lg">
+            <Link
+              to={"/all-blogs"}
+              className="btn btn-md md:btn-lg bg-gradient-to-r from-blue-500 to-purple-500 hover:from-blue-600 hover:to-purple-600 shadow-lg"
+            >
               Explore Blogs
               <ArrowRight className="ml-2 w-5 h-5" />
-            </button>
-            <button className="btn btn-outline btn-md md:btn-lg text-white hover:bg-white/10 border-white/50">
+            </Link>
+            <button
+              onClick={() => {
+                const section = document.getElementById("newslatter");
+                section?.scrollIntoView({ behavior: "smooth" });
+              }}
+              className="btn btn-outline btn-md md:btn-lg text-white hover:bg-white/10 border-white/50"
+            >
               Join Newsletter
               <Zap className="ml-2 w-5 h-5" />
             </button>
