@@ -10,6 +10,7 @@ const LatestBlog = () => {
   const [latestBlogs, setLatestBlogs] = useState([]);
   const { user } = use(AuthContext);
   const [wishlistIds, setWishlistIds] = useState([]);
+  const accessToken = user.accessToken;
   const { ref: titleRef, inView: titleInView } = useInView({
     threshold: 0.3,
     triggerOnce: true,
@@ -62,7 +63,7 @@ const LatestBlog = () => {
     fetchBlogs();
   }, []);
 
-  const latestBlogsData = axios(`${import.meta.env.VITE_API_URL}/latest-blogs`);
+  // const latestBlogsData = axios(`${import.meta.env.VITE_API_URL}/latest-blogs`);
   // console.log(latestBlogsData);
 
   useEffect(() => {
@@ -70,7 +71,12 @@ const LatestBlog = () => {
       if (!user?.email) return;
 
       const response = await axios.get(
-        `${import.meta.env.VITE_API_URL}/wishlist/${user.email}`
+        `${import.meta.env.VITE_API_URL}/wishlist/${user.email}`,
+        {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        }
       );
       const ids = response.data.map((blog) => blog._id);
       setWishlistIds(ids);

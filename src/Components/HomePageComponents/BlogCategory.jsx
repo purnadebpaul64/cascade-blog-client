@@ -2,6 +2,7 @@ import React from "react";
 import { FileText, TrendingUp } from "lucide-react";
 import { useInView } from "react-intersection-observer";
 import { motion } from "framer-motion";
+import { Link } from "react-router";
 
 const categories = [
   {
@@ -154,11 +155,11 @@ const BlogCategory = () => {
                       whileHover={{ scale: 1.02 }}
                       whileTap={{ scale: 0.98 }}
                     >
-                      <button
+                      <Link
                         className={`btn w-full bg-gradient-to-r ${category.color} hover:shadow-lg transition-all duration-300`}
                       >
                         Explore {category.name}
-                      </button>
+                      </Link>
                     </motion.div>
                   </div>
                 </div>

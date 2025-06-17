@@ -27,6 +27,7 @@ const AllBlogsPage = () => {
 
   const { user } = useContext(AuthContext);
   const [wishlistIds, setWishlistIds] = useState([]);
+  const accessToken = user.accessToken;
 
   const { ref: titleRef, inView: titleInView } = useInView({
     threshold: 0.3,
@@ -70,7 +71,12 @@ const AllBlogsPage = () => {
 
       try {
         const response = await axios.get(
-          `${import.meta.env.VITE_API_URL}/wishlist/${user.email}`
+          `${import.meta.env.VITE_API_URL}/wishlist/${user.email}`,
+          {
+            headers: {
+              Authorization: `Bearer ${accessToken}`,
+            },
+          }
         );
         // Convert _id to string to avoid issues
         const ids = response.data.map((blog) => blog._id.toString());
