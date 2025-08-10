@@ -1,6 +1,7 @@
 import React from "react";
 import { useInView } from "react-intersection-observer";
 import { motion } from "framer-motion";
+import { Link } from "react-router";
 
 const ErrorPage = () => {
   const { ref, inView } = useInView({
@@ -35,9 +36,12 @@ const ErrorPage = () => {
           </div>
         </div>
         {/* button */}
-        <button className="h-12 px-6 bg-gradient-to-r from-blue-500 to-purple-500 hover:from-blue-600 hover:to-purple-600 shadow-lg hover:shadow-blue-500/25 border border-white/20 backdrop-blur-sm rounded-xl">
+        <Link
+          to={"/"}
+          className="h-12 px-6 bg-gradient-to-r from-blue-500 to-purple-500 hover:from-blue-600 hover:to-purple-600 shadow-lg hover:shadow-blue-500/25 border border-white/20 backdrop-blur-sm rounded-xl"
+        >
           Go Back To Home
-        </button>
+        </Link>
       </motion.div>
     </div>
   );

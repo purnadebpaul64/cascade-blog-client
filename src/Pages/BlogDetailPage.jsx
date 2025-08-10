@@ -1,15 +1,17 @@
 import { Calendar, User } from "lucide-react";
 import React, { use, useEffect, useState } from "react";
-import { Link, useLoaderData } from "react-router";
+import { Link, useLoaderData, useNavigate } from "react-router";
 import { AuthContext } from "../Providers/AuthProviders";
 import axios from "axios";
 import Swal from "sweetalert2";
 import { Helmet } from "react-helmet-async";
+import DOMPurify from "dompurify";
 
 const BlogDetailPage = () => {
-  const { user } = use(AuthContext);
+  const { user } = React.use(AuthContext);
   const [commentText, setCommentText] = useState("");
   const [comments, setComments] = useState([]);
+  const navigate = useNavigate();
 
   const formatDate = (dateString) => {
     const date = new Date(dateString);
@@ -106,7 +108,7 @@ const BlogDetailPage = () => {
       <Helmet>
         <title>{title}</title>
       </Helmet>
-      <section className="py-20 bg-gradient-to-br from-purple-950 via-gray-900 to-purple-950">
+      <section className="py-10 bg-gradient-to-br from-purple-950 via-gray-900 to-purple-950">
         <div className="w-11/12 md:w-8/12 mx-auto space-y-10">
           <div className="badge px-5 py-3 bg-gradient-to-r from-green-500 to-emerald-500 text-white text-md font-semibold rounded-full shadow-lg backdrop-blur-sm border border-white/20">
             {category}
@@ -120,7 +122,7 @@ const BlogDetailPage = () => {
             </h2>
           </div>
           <div className="flex items-center space-x-6 text-slate-400 mb-8">
-            <div className="flex items-center space-x-2">
+            <div className="flex items-center font-medium space-x-2 px-5 py-2 rounded-full bg-white/10">
               <User className="h-4 w-4" />
               <span>{addedUser}</span>
             </div>
@@ -136,13 +138,17 @@ const BlogDetailPage = () => {
               alt=""
             />
           </div>
-          <div>
-            <p className="text-lg leading-10 text-gray-300">{blogDetails}</p>
-          </div>
+          {/* Render sanitized HTML for blog details */}
+          <div
+            className="rich-text max-w-none text-gray-300 p-4 rounded-xl bg-white/10 border border-white/20"
+            dangerouslySetInnerHTML={{
+              __html: DOMPurify.sanitize(blogDetails),
+            }}
+          ></div>
           <div>
             {isOwner && (
               <Link
-                to={`/update-blog/${_id}`}
+                to={`/admin/update-blog/${_id}`}
                 className="mt-3 px-4 py-2 bg-blue-600 text-white rounded"
               >
                 Update Blog

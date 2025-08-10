@@ -80,18 +80,18 @@ const Navbar = () => {
                 user && (
                   <>
                     <NavLink
-                      to="/add-blog"
-                      className="flex items-center space-x-1 text-[#757D85] hover:text-primary transition-colors font-medium px-3 py-2 rounded-md hover:bg-accent"
-                    >
-                      <CirclePlus className="h-4 w-4" />
-                      <span>Add Blog</span>
-                    </NavLink>
-                    <NavLink
                       to="/wishlist"
                       className="flex items-center space-x-1 text-[#757D85] hover:text-primary transition-colors font-medium px-3 py-2 rounded-md hover:bg-accent"
                     >
                       <BookmarkCheck className="h-4 w-4" />
                       <span>Wishlist</span>
+                    </NavLink>
+                    <NavLink
+                      to="/admin"
+                      className="flex items-center space-x-1 text-[#757D85] hover:text-primary transition-colors font-medium px-3 py-2 rounded-md hover:bg-accent"
+                    >
+                      <BookmarkCheck className="h-4 w-4" />
+                      <span>Dashboard</span>
                     </NavLink>
                   </>
                 )
@@ -183,25 +183,6 @@ const Navbar = () => {
                   <span>Featured Blogs</span>
                 </NavLink>
 
-                {/* {!loading && user && (
-                  <>
-                    <NavLink
-                      to={"/add-blog"}
-                      className="flex items-center space-x-1 text-[#757D85] hover:text-primary transition-colors px-3 py-2 rounded-md hover:bg-accent"
-                    >
-                      <CirclePlus className="h-4 w-4" />
-                      <span>Add Blog</span>
-                    </NavLink>
-                    <NavLink
-                      to={"/wishlist"}
-                      className="flex items-center space-x-1 text-[#757D85] hover:text-primary transition-colors px-3 py-2 rounded-md hover:bg-accent"
-                    >
-                      <BookmarkCheck className="h-4 w-4" />
-                      <span>Wishlist</span>
-                    </NavLink>
-                  </>
-                )} */}
-
                 {loading ? (
                   <>
                     <div className="skeleton h-8 w-24 mx-3 my-2 rounded-md"></div>
@@ -211,18 +192,18 @@ const Navbar = () => {
                   user && (
                     <>
                       <NavLink
-                        to={"/add-blog"}
-                        className="flex items-center space-x-1 text-[#757D85] hover:text-primary transition-colors px-3 py-2 rounded-md hover:bg-accent"
-                      >
-                        <CirclePlus className="h-4 w-4" />
-                        <span>Add Blog</span>
-                      </NavLink>
-                      <NavLink
                         to={"/wishlist"}
                         className="flex items-center space-x-1 text-[#757D85] hover:text-primary transition-colors px-3 py-2 rounded-md hover:bg-accent"
                       >
                         <BookmarkCheck className="h-4 w-4" />
                         <span>Wishlist</span>
+                      </NavLink>
+                      <NavLink
+                        to={"/admin"}
+                        className="flex items-center space-x-1 text-[#757D85] hover:text-primary transition-colors px-3 py-2 rounded-md hover:bg-accent"
+                      >
+                        <BookmarkCheck className="h-4 w-4" />
+                        <span>Dashboard</span>
                       </NavLink>
                     </>
                   )

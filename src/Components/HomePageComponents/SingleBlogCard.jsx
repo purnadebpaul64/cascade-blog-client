@@ -117,7 +117,7 @@ const SingleBlogCard = ({ blog, index, isWishlistedByUser = false }) => {
       </div>
 
       <div className="p-6 pt-0">
-        <h3 className="text-xl font-semibold text-white mb-3 group-hover:text-cyan-400 transition-colors duration-300 line-clamp-2">
+        <h3 className="text-xl font-semibold text-white mb-3 group-hover:text-cyan-200 transition-colors duration-300 line-clamp-2">
           {blog.title}
         </h3>
         <motion.p
@@ -130,7 +130,7 @@ const SingleBlogCard = ({ blog, index, isWishlistedByUser = false }) => {
 
         <div className="flex items-center justify-between text-sm text-white/60 mb-4">
           <motion.div
-            className="flex items-center space-x-2 group-hover:text-cyan-400 transition-colors backdrop-blur-sm bg-white/5 px-2 py-1 rounded-lg border border-white/10"
+            className="flex items-center space-x-2 group-hover:text-cyan-300 transition-colors backdrop-blur-sm bg-white/5 px-2 py-1 rounded-lg border border-white/10"
             whileHover={{ scale: 1.05 }}
           >
             <User className="h-4 w-4" />
